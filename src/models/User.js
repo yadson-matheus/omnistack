@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const uniqueValidation = require('mongoose-unique-validation');
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
     email: {
@@ -26,8 +26,8 @@ const UserSchema = new mongoose.Schema({
 	}
 });
 
-UserSchema.pre("save", async function(next) {
-    if (!this.isModified("password")) next();
+UserSchema.pre('save', async function(next) {
+    if (!this.isModified('password')) next();
   
     this.password = await bcrypt.hash(this.password, 10);
 });
@@ -39,17 +39,11 @@ UserSchema.pre('update', async function(next) {
 });
   
 UserSchema.methods = {
-    compareHash(hash) {
-        return bcrypt.compare(hash, this.password);
+    async compareHash(hash) {
+        return await bcrypt.compare(hash, this.password);
     },
     generateToken() {
-        return jwt.sign({ id: this.id }, "secret", { expiresIn: 86400 });
-    },
-    withoutPassword() {
-        const user = this.toObject();
-        delete user.password;
-
-        return user;
+        return jwt.sign({ id: this.id }, 'secret', { expiresIn: 86400 });
     }
 };
 

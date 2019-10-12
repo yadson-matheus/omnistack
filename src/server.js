@@ -7,10 +7,11 @@ const routes = require('./routes');
 
 const app = express();
 
-mongoose.connect('mongodb://localhost/omnistack', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-});
+mongoose.connect('mongodb://localhost/omnistack', { 
+    useNewUrlParser: true, 
+    useUnifiedTopology: true 
+})
+.catch (error => console.log('Database connection failed'));
 
 app.use(cors());
 app.use(express.json());
